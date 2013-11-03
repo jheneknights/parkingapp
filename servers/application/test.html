@@ -1,0 +1,73 @@
+<div class="content">
+    <!-- <a href="#myModal" class="button">Open modal</a> -->
+    <div class="response"></div>
+</div>
+
+<!-- <div id="myModal" class="modal" style="display: none">
+  <header class="bar-title">
+    <h1 class="title">Modal</h1>
+    <a class="button" href="#myModal">
+      Close
+    </a>
+  </header>
+  
+  <div class="content content-padded">
+    <p>The contents of my modal.</p>
+  </div>
+</div> -->
+<script id="res-template" type="text/x-handlebars">
+	<ul class="list inset">
+		<li>No. Plate: <a class="button-positive">{{noPlate}}</a></li>
+		<li>phoneNo: <a class="button-positive">{{phoneNo}}</a></li>
+
+		<li>last scanned: <a class="button-positive">{{lastscanned}}</a></li>
+		<li>scanned by: <a class="button-positive">{{scannedBy}}</a></li>
+		<li>time allocated: <a class="button-positive">{{timeAllocated}}</a></li>
+
+		<li class="list-divider">More Details</li>
+		{{#with details}}
+			<li>time paid: {{paid}}</li>
+			<li>ending: {{ending}}, specifically {{offset}}</li>
+			<li>in minutes: {{in_minutes}} ({{in_hrs}} hours)</li>
+		{{/with}}
+
+		<li>User ID: {{_id}}</li>
+	<ul>
+</script>
+<style type="text/css">p{padding: 0; margin: 0}</style>
+<!-- Style sheets -->
+<link rel="stylesheet" href="./css/general.css" />
+<link rel="stylesheet" href="./css/ratchet.css" />
+
+<!-- Scripts -->
+<script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="./js/handlebars.js"></script>
+<script type="text/javascript" src="./js/moment.min.js"></script>
+<script type="text/javascript" src="./js/ratchet.min.js"></script>
+<script type="text/javascript">
+    var data = {
+        scannedBy: "Jhene Knights",
+        noPlate: "KBJ075K",
+        phoneNo: "0723001575",
+        timeStamp: moment().format(),
+        geolocation: "false" //should be added later in the app
+    }
+    console.log(data);
+
+    //handlebars
+    var template = $('#res-template').html();
+    var hb = Handlebars.compile(template);
+    $(function() {
+    	$.support.cors = true;
+        //$.mobile.allowCrossDomainPages = true;
+
+        //Send this data to the Server's and await response
+        jQuery.get('http://jkpkapp.aws.af.cm/scan', data, function(json) { //response from server
+            $('.response').html(hb(json));
+        }, "json").done(function() {
+        	console.log("SHIT IS COMPLETE")
+        }).fail(function (xhr, text, error) {
+        	console.log(error)
+        });
+    })
+</script>

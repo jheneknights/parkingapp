@@ -1,0 +1,141 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+
+    <meta name="description" content=" " />
+    <meta name="keywords" content=" " />
+
+    <title></title>
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" type="image/png" href="" />
+    <link rel="shortcut icon" type="image/x-icon" href="" />
+
+    <!-- Style sheets -->
+    <link rel="stylesheet" href="./css/general.css" />
+    <link rel="stylesheet" href="./css/ratchet.css" />
+
+    <!-- App UI/UX flow helpers -->
+    <style>
+        .registration-form span {
+            display: none;
+        }
+        blockquote {
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #888;
+            text-align: center;
+            padding: 1em
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <header class="bar-title">
+        <!-- App's header bar -->
+        <h1 class="title">Parking App</h1>
+    </header>
+
+    <div class="content">
+        <ul id="device-status" class="list">
+            <li>
+                <h3>Device Status:
+                    <a id="status" data-bind="css: appStatus().css, text: appStatus().text"></a>
+                </h3>
+            </li>
+        </ul>
+
+        <!-- if app hsnt initailised -->
+        <blockquote data-bind="visible: !appInit()">Please wait while the app initiliases...</blockquote>
+
+        <!-- if NFC is active -->
+        <blockquote data-bind="visible: ndefData().length == 0, text: scanStatus"></blockquote>
+
+        <!-- popluate these fields with the response from the server -->
+        <!-- ko: if ndefData().length > 0 -->
+        <div class="nfc-content">
+            <h2 data-bind="visible: ndefData().length > 0" class="align-center grey small-padding"> Tag scanned: </h2>
+            <ul class="list inset" data-bind="foreach: ndefData">
+                <li>No. Plate: <a class="button-main" data-bind="text: noPlate"></a></li>
+                <li>phoneNo: <a class="button-main" data-bind="text: phoneNo"></a></li>
+
+                <li>last scanned: <a class="button-positive" data-bind="text: lastscanned"></a></li>
+                <li>scanned by: <a class="button" data-bind="text: scannedBy"></a></li>
+                <li>time allocated: <a class="button-positive" data-bind="text: timeAllocated"></a></li>
+
+                <li class="list-divider"><h3>Overdues:</h3></li>
+                <li>Overtime: <a class="button" data-bind="text: overdueTime"></a></li>
+                <li>Overdue Cost: <a class="button-negative" data-bind="text: overdueCost"></a></li>
+
+                <li class="list-divider"><h3>More Details: </h3></li>
+                <li>Time Paid: <a class="button" data-bind="text: details.paid"></a></li>
+                <li>Ending: <a class="button-main" data-bind="text: details.ending"></a></li>
+                <li>ETA: <a class="button-main" data-bind="text: details.offset"></a></li>
+                <li>In Minutes: <a data-bind="text: details.in_minutes, css: {'button-positive': details.in_minutes >= 0, 'button-negative': details.in_minutes < 0}"></a></li>
+                <li>In hours: <a data-bind="text: details.in_hrs, css: {'button-positive': details.in_hrs >= 0, 'button-negative': details.in_hrs < 0}"></a></li>
+                <li>User REF ID: <a class="button" data-bind="text: _id"></a></li>
+            <ul>
+        </div>
+        <!-- /ko -->
+    </div>
+
+    <!-- ko if: signupForm -->
+    <div id="signupmodal" class="modal">
+        <header class="bar-title">
+            <h1 class="title">Who is scanning?</h1>
+            <a class="button register-user">Done</a>
+        </header>
+        <div class="content">
+            <div class="errormessage red-bg white padding" data-bind="visible: !allisvalid()">
+                Please fill in the correct details.
+            </div>
+            <form class="registration-form">
+                <div class="input-group">
+                    <input data-bind="value: name, valueUpdate: 'afterkeydown'" type="text" name="name" placeholder="Full names e.g Eugene Mutai">
+                    <input data-bind="value: registration, valueUpdate: 'afterkeydown'" type="text" name="regno" placeholder="Work/Reg No.">
+                </div>
+                <a class="register-user button-positive button-block">Register</a>
+            </form>
+        </div>
+    </div>
+    <!-- /ko -->
+
+    <!-- cordova needed -->
+    <script type="text/javascript" src="cordova.js"></script>
+
+    <!--  other app necessities -->
+    <script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+    <!-- // <script type="text/javascript" src="./js/handlebars.js"></script> -->
+
+    <!-- time management -->
+    <script type="text/javascript" src="./js/moment.min.js"></script>
+
+    <script type="text/javascript" src="./js/knockout-2.2.1.js"></script>
+    <script type="text/javascript" src="./js/knockout.validation.js"></script>
+
+    <!-- Include the compiled Ratchet JS -->
+    <script type="text/javascript" src="./js/ratchet.js"></script>
+    <script type="text/javascript" src="./js/application.js"></script>
+    <script type="text/javascript">
+        //on document ready, as soon as it begins to load
+        $(function() {
+            var self = appmodel;
+            ko.applyBindings(self);
+
+            $.support.cors = true;
+            // $.mobile.allowCrossDomainPages = true;
+
+            //initialise the app
+            app.initialize();
+
+            $('blockquote').on('click', function() {
+                // app.deviceready(); //re-initialise the app
+            })
+        })
+    </script>
+</body>
