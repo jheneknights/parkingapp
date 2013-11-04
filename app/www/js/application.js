@@ -108,7 +108,7 @@ var app = {
         var tag = nfcEvent.tag;
 
         //empty the scanned content
-        appmodel.ndefData.removeAll();
+        appmodel.ndefData.removeAll(); //KO
         appmodel.scanStatus("Tag discovered, extracting content...");
 
         // BB7 has different names, copy to Android names
@@ -190,7 +190,6 @@ var app = {
             "phoneNo": "0723001575",
             "noPlate": "KBJ075K"
         }
-
         //create ndefMessage and write to the TAG
         // var ndefMessage = ndef.mimeMediaRecord('text/pg', nfc.stringToBytes(JSON.stringify(data)));
         var ndefMessage = ndef.textRecord(JSON.stringify(data));
