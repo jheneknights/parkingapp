@@ -28,23 +28,15 @@
 
     <!-- TukTuk Framework -->
     <link rel="stylesheet" href="./framework/tuktuk.css" />
-    <link rel="stylesheet" href="./framework/tuktuk.icons.css" />
     <link rel="stylesheet" href="./framework/tuktuk.theme.css" />
+    <link rel="stylesheet" href="./framework/tuktuk.icons.css" />
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="./css/general.css" />
 
-    <!-- Javascripts -->
-    <script type="text/javascript" src="./js/jquery-1.8.0.min.js"></script>
-    <script type="text/javascript" src="./js/jquery.hammer.min.js"></script>
-    <!-- // <script type="text/javascript" src="./mobilefw/quo.debug.js"></script> -->
-    <!-- // <script type="text/javascript" src="./mobilefw/quo.js"></script> -->
-
-    <script type="text/javascript" src="./framework/tuktuk.js"></script>
-
 </head>
 
-<body class="responsive" datatuktuk="boxes">
+<body>
 
     <section id="scanpage home" class="bck light padding-bottom app-page">
         <header class="bck blue padding-top padding-bottom margin-bottom">
@@ -65,12 +57,16 @@
                     <input class="large" type="text" placeholder="enter plate no">
                 </div>
                 <div class="column_2">
-                    <button class="anchor bck info text bold large"><span class="icon search"></span>Search</button>
+                    <button data-tuktuk-modal="modal-right" data-tip="check user" class="anchor bck green large tip-top">
+                        <span class="icon search on-right"></span>
+                        <span class="margin-left">Search</span>
+                    </button>
                 </div>
             </div>
         </article>
         <footer class="fixed bck dark text center padding bold">
-            Handcrafted by <span class="green text bold">Jhene Knights &copy;2013</span>
+            Handcrafted by
+            <span class="green text bold">Jhene Knights &copy;2013</span>
         </footer>
     </section>
 
@@ -109,7 +105,7 @@
         <header class="bck dark padding-top padding-bottom margin-bottom">
             <div class="row">
                 <nav class="on-left">
-                    <a href="#signup" class="button alert text bold white">
+                    <a href="#home" class="button alert text bold white">
                         <span class="icon chevron-left"></span>Back
                     </a>
                 </nav>
@@ -135,6 +131,45 @@
             </div>
         </article>
     </section>
+
+    <div class="app-page overlay"></div>
+    <section id="modal-right" data-tuktuk="modal" class="side column_5">
+        <header>
+            <h4 class="inline text book">Side window.</h4>
+            <button data-modal="close" class="transparent small on-right inline icon remove"></button>
+        </header>
+        <article class="form">
+            <label>example of input</label>
+            <input type="text" value="text" />
+            <input type="text" class="large" value="text" />
+
+            <label>Example of textarea</label>
+            <textarea>textarea</textarea>
+            <textarea class="large">textarea</textarea>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt quos dolorum minus fugiat rem similique velit aperiam est sequi neque nulla tenetur minima autem facilis temporibus quaerat consectetur impedit praesentium.
+        </article>
+        <footer>
+            <button data-modal="close">Save</button>
+        </footer>
+    </section>
+
+    <javascript>
+        <!-- Javascripts -->
+        <script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
+        <script type="text/javascript" src="./js/jquery.hammer.min.js"></script>
+        <!-- // <script type="text/javascript" src="./mobilefw/quo.debug.js"></script> -->
+        <!-- // <script type="text/javascript" src="./mobilefw/quo.js"></script> -->
+
+        <script type="text/javascript" src="./framework/tuktuk.js"></script>
+
+        <!-- Other Important -->
+        <script type="text/javascript" src="./js/knockout-2.2.1.js"></script>
+        <script type="text/javascript" src="./js/knockout.validation.js"></script>
+        <script type="text/javascript" src="./js/moment.min.js"></script>
+
+        <!-- App Functions -->
+        <script type="text/javascript" src="./js/application.js"></script>  
+    </javascript>
 
 </body>
 
