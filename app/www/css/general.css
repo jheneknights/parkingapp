@@ -55,4 +55,8 @@ img.logo{
 .green-bg{background: #2ecc71}
 .yellow-bg{background: #f1c40f}
 .blue-bg{background: #3498DB}
-.grey-bg{color: #bdc3c7
+.grey-bg{color: #bdc3c7}
+
+/*** list-style ***/
+ul{width: 100%; list-style-type: none;}
+ul li{padding: 1em; border-bottom: #bdc3c7; color: black;}
