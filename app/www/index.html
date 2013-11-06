@@ -53,9 +53,9 @@
             </div>
         </header>
 
-        <div class="row" data-bind="visible: scanStatus().length !== 0">
-            <div class="bck info text large center bold radius">
-                <span data-bind="text: scanStatus">Hope this is an alert box</span>
+        <div class="row" data-bind="visible: apperror() !== null">
+            <div class="blue-bg text white large center bold radius small-padding">
+                <span data-bind="text: apperror">Hope this is an alert box</span>
             </div>
         </div>
 
@@ -66,31 +66,31 @@
                 </div>
                 <div class="column_2">
                     <!-- <a href="#modal-right"> -->
-                    <button data-bind="click: searchUser, clickBubble: false" data-tip="check user" class="anchor bck green large tip-top">
+                    <button data-bind="click: searchUser, clickBubble: false, css: {'green': scanStatus() == null, 'info': scanStatus() !== null}" data-tip="serach user" class="anchor bck green large tip-top">
                         <span class="icon search on-right"></span>
-                        <span class="margin-left">Search</span>
+                        <span class="margin-left" data-bind="text: scanStatus() !== null ? scanStatus: 'Search'">Search</span>
                     </button>
                     <!-- </a> -->
                 </div>
             </div>
         </article>
         <article id="list-indented" class="active padding" height="400px">
+            <!-- <h2 data-bind="visible: serverResponse().length > 0" class="align center">Plate Results:</h2> -->
             <div class="list scroll img h512">
                 <!-- popluate these fields with the response from the server -->
-                <!-- ko: if ndefData().length > 0 -->
-                <h2 data-bind="visible: ndefData().length > 0" class="align center">Plate Results:</h2>
-                <div class="nfc-content">                  
-                    <ul class="list inset text bold large" data-bind="foreach: ndefData">
+                <!-- ko: if serverResponse().length > 0 -->           
+                <div class="nfc-content">                
+                    <ul class="list inset text bold large" data-bind="foreach: serverResponse">
                         <!-- Basic Details -->
                         <li class="fw-blue"><span>Basic detail:</span></li>
-                        <li>No. Plate:<span class="text color green-text uppercase right large padding-left" data-bind="text: noPlate"></span></li>
-                        <li>phoneNo: <span class="text color green-text uppercase right large padding-left" data-bind="text: phoneNo"></span>
+                        <li>No. Plate:<span class="text color blue-text uppercase right large padding-left" data-bind="text: noPlate"></span></li>
+                        <li>phoneNo: <span class="text color blue-text uppercase right large padding-left" data-bind="text: phoneNo"></span>
                         </li>
-                        <li>last scanned:<span class="text color green-text right large padding-left" data-bind="text: lastscanned"></span>
+                        <li>last scanned:<span class="text color blue-text right normal padding-left" data-bind="text: lastscanned"></span>
                         </li>
-                        <li>scanned by: <span class="text color green-text right large padding-left" data-bind="text: scannedBy"></span>
+                        <li>scanned by: <span class="text color blue-text right large padding-left" data-bind="text: scannedBy"></span>
                         </li>
-                        <li>time allocated: <span class="text color green-text right large padding-left" data-bind="text: timeAllocated"></span>
+                        <li>time allocated: <span class="text color blue-text right large padding-left" data-bind="text: timeAllocated"></span>
                         </li>
 
                         <!-- overdues -->
@@ -112,14 +112,15 @@
                         </li>
                         <li>In hours: <span class="text color right large padding-left" data-bind="text: details.in_hrs, css: {'purple-text': details.in_hrs >= 0, 'red-text': details.in_hrs < 0}"></span>
                         </li>
-                        <li>User REF ID: <span class="text color blue-text right large padding-left" data-bind="text: _id"></span>
+                        <li>User REF ID: <span class="text color purple-text right large padding-left" data-bind="text: _id"></span>
                         </li>
+                        <li><span>&nbsp;</span></li>
                     <ul>
                 </div>
                 <!-- /ko -->
             </div>
         </article>
-        <footer class="fixed bck dark text center padding bold">
+        <footer data-bind="visible: serverResponse().length == 0" class="fixed bck dark text center padding bold">
             Handcrafted by
             <span class="text bold green-text">Jhene Knights &copy;2013</span>
         </footer>

@@ -41,14 +41,14 @@ var appmodel = {
         }
     }),
     appInit: ko.observable(false), //has the app initialised
-    ndefData: ko.observableArray([
+    serverResponse: ko.observableArray([
         /* {
             phoneNo: '0723001575',
             noPlate: 'KBJ075K'
         } */
     ]),
     //scan status of the app
-    scanStatus: ko.observable(''),
+    scanStatus: ko.observable(null),
     searchUser: function(ko, event) {
         if (this.noplate().length !== 0) {
             var data = { //create the XHR request param
@@ -58,18 +58,22 @@ var appmodel = {
                 timeStamp: moment().format(),
                 geolocation: "false" //should be added later in the app
             }
+            appmodel.apperror(null);
+            appmodel.scanStatus('Searching...please wait.')
             var jqhxr = jQuery.get('http://jkpkapp.aws.af.cm/scan', data, function(json) { //response from server
                 // navigator.notification.alert(JSON.stringify(json), app.doNothing, "Response from server");
-                appmodel.ndefData.push(json);
+                appmodel.serverResponse.push(json);
+                appmodel.scanStatus(null);
             }, "json").fail(function(xhr, text, error) {
-                appmodel.scanStatus("For some reason, failed to connect with the servers. <br/><span class='red-bg white small-padding'>Error: " + error + '</span>') //, app.doNothing, "XHR error");
+                appmodel.apperror("For some reason, failed to connect with the servers. <br/><span class='red-bg white small-padding'>Error: " + error + '</span>') //, app.doNothing, "XHR error");
             }).done(function(json) {
-                appmodel.scanStatus("Successfully server request.")
+                appmodel.scanStatus(null)
                 console.log("successfully fetch related data from the servers");
             });
             // navigator.notification.vibrate(100);
         }
-    }
+    },
+    apperror: ko.observable(null)
 }
 
 appmodel.allisvalid = ko.computed(function() {
@@ -98,7 +102,8 @@ var app = {
         //App has initialised
         if (app.checkUser()) //1st
         {
-            console.log("there is a valid user")
+            console.log("there is a valid user");
+            appmodel.appInit(true); //pass true, app has innitialsied
         }
     },
     //Authenticating the USER that will use the NFC scanner
