@@ -5,9 +5,9 @@ html, body {
     cursor: default;
     overflow-x: hidden;
 }
-
 .fixed{position: fixed; width: 100%; bottom: 0; left: 0;}
 
+/* ---------- PAGE TRANSITIONS --------- */
 /*** adds the sliding animation to the page ***/
 .panel{
     width: 100%;
@@ -30,7 +30,7 @@ html, body {
     background-color: #b1e583;
 }
 
-/*** splash page ***/
+/*** splash page, or app full page rendering ***/
 .splash, .app-page{width: 100%; height: 100%; margin:0; overflow: hidden;}
 .overlay{background: #000; opacity: .7; position: fixed; top: 0; left: 0; z-index: 99; display: none;}
 
@@ -40,23 +40,18 @@ img.logo{
     max-width: 320px;
 }
 
-/******* Colors *******/
-.red{color: #e74c3c}
-.orange{color: #f39c12}
-.green{color: #2ecc71}
-.yellow{color: #f1c40f}
-.blue{color: #3498DB}
-/*.white{color: #fefefe}*/
-.grey{color: #bdc3c7}
-
-/****** Background colors *************/
+/****** Background colors: helpful *************/
 .red-bg{background: #e74c3c}
 .orange-bg{background: #f39c12}
-.green-bg{background: #2ecc71}
+.green-bg{background: #2ecc71} /* PS --- can be used inside list tags to give them background colors */
 .yellow-bg{background: #f1c40f}
 .blue-bg{background: #3498DB}
-.grey-bg{color: #bdc3c7}
+.grey-bg{background: #bdc3c7}
+[class$="bg"]{color: white;}
 
-/*** list-style ***/
-ul{width: 100%; list-style-type: none;}
-ul li{padding: 1em; border-bottom: #bdc3c7; color: black;}
+.red-text{color: #e74c3c}
+.orange-text{color: #f39c12}
+.green-text{color: #2ecc71} /* PS --- can be used inside list tags to give them color colors */
+.yellow-text{color: #f1c40f}
+.blue-text{color: #3498DB}
+.grey-text{color: #bdc3c7}

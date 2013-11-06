@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.parking.app" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Parking App</name>
+<widget id="com.app.parking" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>ParkingApp</name>
     <description>
         A sample Apache Cordova application that responds to the deviceready event.
     </description>
@@ -8,10 +8,8 @@
         Apache Cordova Team
     </author>
     <content src="index.html" />
-
-    <access origin="*" subdomains="true"/>
-    <access origin="http://af.cm" subdomains="true"/>
-
+    <access origin="*" subdomains="true" />
+    <access origin="http://af.cm" subdomains="true" />
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
 </widget>

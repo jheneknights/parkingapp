@@ -63,21 +63,10 @@
                     </button>
                 </div>
             </div>
-
-            <div class="row center">
-                <div class="column_8 margin">
-                    <h3 class="color green light largeactive">RESULTS</h3>
-                    <div class="column_8 on-left">
-                        <strong class="left large">Parking Fees</strong>
-                        <span class="bck alert radius text right">1000</span>
-                    </div>
-                </div>
-            </div>
-
         </article>
         <footer class="fixed bck dark text center padding bold">
             Handcrafted by
-            <span class="green text bold">Jhene Knights &copy;2013</span>
+            <span class="text bold green-text">Jhene Knights &copy;2013</span>
         </footer>
     </section>
 
@@ -144,97 +133,50 @@
     </section>
 
     <div class="app-page overlay"></div>
-    <section id="modal-right" data-tuktuk="modal" class="side column_5">
-        <header>
-            <h4 class="inline text book">Side window.</h4>
+    <section id="modal-right" data-tuktuk="modal" class="side column_6 bck light">
+        <header class="color navy">
+            <h4 class="inline text large bold">Results.</h4>
             <button data-modal="close" class="transparent small on-right inline icon remove"></button>
         </header>
-        <article class="form">
-            <label>example of input</label>
-            <input type="text" value="text" />
-            <input type="text" class="large" value="text" />
-
-            <label>Example of textarea</label>
-            <textarea>textarea</textarea>
-            <textarea class="large">textarea</textarea>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sunt quos dolorum minus fugiat rem similique velit aperiam est sequi neque nulla tenetur minima autem facilis temporibus quaerat consectetur impedit praesentium.
+        <article id="car-info" class="list scroll active">
+            <!-- Content will be rendered here -->
+            <ul>
+                <li>                
+                    <a href="#" class="margin-bottom">
+                        <div class="on-right button bck alert text large bold padding white radius">ashdhjdhkhkhhsdjkhhahbahjhdh</div>
+                        <strong>&lt;strong&gt; element</strong>
+                    </a>
+                </li>
+            </ul>
         </article>
         <footer>
             <button data-modal="close">Save</button>
         </footer>
     </section>
 
-    <section class="list inset" data-bind="foreach: ndefData">
-        <div>No. Plate:
-            <a class="button-main" data-bind="text: noPlate"></a>
-        </div>
-        <div>phoneNo:
-            <a class="button-main" data-bind="text: phoneNo"></a>
-        </div>
+    <script type="text/x-handlerbars" data-template="true">
+    </script>
 
-        <div>last scanned:
-            <a class="button-positive" data-bind="text: lastscanned"></a>
-        </div>
-        <div>scanned by:
-            <a class="button" data-bind="text: scannedBy"></a>
-        </div>
-        <div>time allocated:
-            <a class="button-positive" data-bind="text: timeAllocated"></a>
-        </div>
+    <javascript>
+        <!-- Base engine -->
+        <script type="text/javascript" src="cordova.js"></script>
 
-        <div class="list-divider">
-            <h3>Overdues:</h3>
-        </div>
-        <div>Overtime:
-            <a class="button" data-bind="text: overdueTime"></a>
-        </div>
-        <div>Overdue Cost:
-            <a class="button-negative" data-bind="text: overdueCost"></a>
-        </div>
+        <!-- Javascripts -->
+        <script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
+        <script type="text/javascript" src="./js/jquery.hammer.min.js"></script>
+        <!-- // <script type="text/javascript" src="./mobilefw/quo.debug.js"></script> -->
+        <!-- // <script type="text/javascript" src="./mobilefw/quo.js"></script> -->
 
-        <div class="list-divider">
-            <h3>More Details:</h3>
-        </div>
-        <div>Time Paid:
-            <a class="button" data-bind="text: details.paid"></a>
-        </div>
-        <div>Ending:
-            <a class="button-main" data-bind="text: details.ending"></a>
-        </div>
-        <div>ETA:
-            <a class="button-main" data-bind="text: details.offset"></a>
-        </div>
-        <div>In Minutes:
-            <a data-bind="text: details.in_minutes, css: {'button-positive': details.in_minutes >= 0, 'button-negative': details.in_minutes < 0}"></a>
-        </div>
-        <div>In hours:
-            <a data-bind="text: details.in_hrs, css: {'button-positive': details.in_hrs >= 0, 'button-negative': details.in_hrs < 0}"></a>
-        </div>
-        <div>User REF ID:
-            <a class="button" data-bind="text: _id"></a>
-        </div>
-        <section>
+        <script type="text/javascript" src="./framework/tuktuk.js"></script>
 
-            <script type="text/x-handlerbars" data-template="true">
-            </script>
+        <!-- Other Important -->
+        <script type="text/javascript" src="./js/knockout-2.2.1.js"></script>
+        <script type="text/javascript" src="./js/knockout.validation.js"></script>
+        <script type="text/javascript" src="./js/moment.min.js"></script>
 
-            <javascript>
-                <!-- Javascripts -->
-                <script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
-                <script type="text/javascript" src="./js/jquery.hammer.min.js"></script>
-                <!-- // <script type="text/javascript" src="./mobilefw/quo.debug.js"></script> -->
-                <!-- // <script type="text/javascript" src="./mobilefw/quo.js"></script> -->
-
-                <script type="text/javascript" src="./framework/tuktuk.js"></script>
-
-                <!-- Other Important -->
-                <script type="text/javascript" src="./js/knockout-2.2.1.js"></script>
-                <script type="text/javascript" src="./js/knockout.validation.js"></script>
-                <script type="text/javascript" src="./js/moment.min.js"></script>
-
-                <!-- App Functions -->
-                <script type="text/javascript" src="./js/application.js"></script>
-            </javascript>
+        <!-- App Functions -->
+        <script type="text/javascript" src="./js/application.js"></script>
+    </javascript>
 
 </body>
 
