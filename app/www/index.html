@@ -38,6 +38,7 @@
 
 <body>
 
+    <!-- Scan Page -->
     <section id="scanpage home" class="bck light padding-bottom app-page">
         <header class="bck blue padding-top padding-bottom margin-bottom">
             <div class="row">
@@ -45,24 +46,31 @@
                     <span class="tag bold large bck alert">NEW!</span>
                 </h3>
                 <nav class="on-right">
-                    <a href="#loginpage" class="button small text bold white inline">
+                    <a href="#top-up-page" class="button small text bold white inline">
                         <span class="icon pencil"></span>Top Up
                     </a>
                 </nav>
             </div>
         </header>
+
+        <div class="row" data-bind="visible: scanStatus().length !== 0">
+            <div class="bck info text large center bold radius">
+                <span data-bind="text: scanStatus">Hope this is an alert box</span>
+            </div>
+        </div>
+
         <article class="margin-bottom">
             <div class="row center">
-                <div class="column_6 offset_2 form">
-                    <input class="large" type="text" placeholder="enter plate no">
+                <div class="column_6 offset_2 form" data-part="plateno">
+                    <input class="large" data-bind="value: noplate, valueUpdate: 'afterkeydown'" name="plateno" type="text" placeholder="enter plate no">
                 </div>
                 <div class="column_2">
-                    <a href="#modal-right">
-                        <button data-tuktukmodal="modal-right" data-tip="check user" class="anchor bck green large tip-top">
-                            <span class="icon search on-right"></span>
-                            <span class="margin-left">Search</span>
-                        </button>
-                    </a>
+                    <!-- <a href="#modal-right"> -->
+                    <button data-bind="click: searchUser, clickBubble: false" data-tip="check user" class="anchor bck green large tip-top">
+                        <span class="icon search on-right"></span>
+                        <span class="margin-left">Search</span>
+                    </button>
+                    <!-- </a> -->
                 </div>
             </div>
         </article>
@@ -70,58 +78,43 @@
             <div class="list scroll img h512">
                 <!-- popluate these fields with the response from the server -->
                 <!-- ko: if ndefData().length > 0 -->
-                <div class="nfc-content">
-                    <h2 data-bind="visible: ndefData().length > 0" class="align-center grey small-padding">Tag scanned:</h2>
-                    <ul class="list inset" data-bind="foreach: ndefData">
-                        <li>No. Plate:
-                            <a class="button-main" data-bind="text: noPlate"></a>
+                <h2 data-bind="visible: ndefData().length > 0" class="align center">Plate Results:</h2>
+                <div class="nfc-content">                  
+                    <ul class="list inset text bold large" data-bind="foreach: ndefData">
+                        <!-- Basic Details -->
+                        <li class="fw-blue"><span>Basic detail:</span></li>
+                        <li>No. Plate:<span class="text color green-text uppercase right large padding-left" data-bind="text: noPlate"></span></li>
+                        <li>phoneNo: <span class="text color green-text uppercase right large padding-left" data-bind="text: phoneNo"></span>
                         </li>
-                        <li>phoneNo:
-                            <a class="button-main" data-bind="text: phoneNo"></a>
+                        <li>last scanned:<span class="text color green-text right large padding-left" data-bind="text: lastscanned"></span>
                         </li>
-
-                        <li>last scanned:
-                            <a class="button-positive" data-bind="text: lastscanned"></a>
+                        <li>scanned by: <span class="text color green-text right large padding-left" data-bind="text: scannedBy"></span>
                         </li>
-                        <li>scanned by:
-                            <a class="button" data-bind="text: scannedBy"></a>
-                        </li>
-                        <li>time allocated:
-                            <a class="button-positive" data-bind="text: timeAllocated"></a>
+                        <li>time allocated: <span class="text color green-text right large padding-left" data-bind="text: timeAllocated"></span>
                         </li>
 
-                        <li class="list-divider">
-                            <h3>Overdues:</h3>
+                        <!-- overdues -->
+                        <li class="fw-red"><span>Overdues:</span></li>
+                        <li>Overtime: <span class="text color red-text right large padding-left" data-bind="text: overdueTime !== null ? overdueTime: 'none'"></span>
                         </li>
-                        <li>Overtime:
-                            <a class="button" data-bind="text: overdueTime"></a>
-                        </li>
-                        <li>Overdue Cost:
-                            <a class="button-negative" data-bind="text: overdueCost"></a>
+                        <li>Overdue Cost: <span class="text color red-text right large padding-left" data-bind="text: overdueCost !== null ? overdueCost: 'none'"></span>
                         </li>
 
-                        <li class="list-divider">
-                            <h3>More Details:</h3>
+                        <!-- More Details -->
+                        <li class="fw-purple"><span>More Details:</span></li>
+                        <li>Time Paid: <span class="text color purple-text right large padding-left" data-bind="text: details.paid"></span>
                         </li>
-                        <li>Time Paid:
-                            <a class="button" data-bind="text: details.paid"></a>
+                        <li>Ending: <span class="text color purple-text right large padding-left" data-bind="text: details.ending"></span>
                         </li>
-                        <li>Ending:
-                            <a class="button-main" data-bind="text: details.ending"></a>
+                        <li>ETA: <span class="text color purple-text right large padding-left" data-bind="text: details.offset"></span>
                         </li>
-                        <li>ETA:
-                            <a class="button-main" data-bind="text: details.offset"></a>
+                        <li>In Minutes: <span class="text color right large padding-left" data-bind="text: details.in_minutes, css: {'purple-text': details.in_minutes >= 0, 'red-text': details.in_minutes < 0}"></span>
                         </li>
-                        <li>In Minutes:
-                            <a data-bind="text: details.in_minutes, css: {'button-positive': details.in_minutes >= 0, 'button-negative': details.in_minutes < 0}"></a>
+                        <li>In hours: <span class="text color right large padding-left" data-bind="text: details.in_hrs, css: {'purple-text': details.in_hrs >= 0, 'red-text': details.in_hrs < 0}"></span>
                         </li>
-                        <li>In hours:
-                            <a data-bind="text: details.in_hrs, css: {'button-positive': details.in_hrs >= 0, 'button-negative': details.in_hrs < 0}"></a>
+                        <li>User REF ID: <span class="text color blue-text right large padding-left" data-bind="text: _id"></span>
                         </li>
-                        <li>User REF ID:
-                            <a class="button" data-bind="text: _id"></a>
-                        </li>
-                        <ul>
+                    <ul>
                 </div>
                 <!-- /ko -->
             </div>
@@ -132,14 +125,15 @@
         </footer>
     </section>
 
-    <section id="signup" class="bck green padding-bottom panel">
+    <!-- SIGN UP PAGE -->
+    <section id="sign-up-page" class="bck green padding-bottom panel">
         <header class="bck dark padding-top padding-bottom margin-bottom">
             <div class="row">
                 <h3 class="on-left text bold white">Parking App
                     <span class="tag bck alert">NEW!</span>
                 </h3>
                 <nav class="on-right">
-                    <a href="#loginpage" class="button info small text bold white">
+                    <a href="#top-up-page" class="button info small text bold white">
                         <span class="icon pencil"></span>Top Up
                     </a>
                 </nav>
@@ -155,9 +149,9 @@
         <article class="bck green padding">
             <div class="row">
                 <div class="form subscribe column_4 offset_4 centre">
-                    <input id="txt-user-name" class="large" type="text" placeholder="Your username" value="">
-                    <input id="txt-ref-no" class="large" type="text" placeholder="Your REF No." value="">
-                    <button class="anchor margin-top button navy info large icon user">
+                    <input data-bind="value: name, attr: {required: $root.allisvalid()}" id="txt-user-name" class="large" type="text" placeholder="Your username" value="">
+                    <input data-bind="value: registration" id="txt-ref-no" class="large" type="text" placeholder="Your REF No." value="">
+                    <button id="register-user" class="anchor margin-top button navy info large icon user">
                         <span class="bold">Sign In</span>
                     </button>
                 </div>
@@ -165,7 +159,8 @@
         </article>
     </section>
 
-    <section id="loginpage" class="bck navy padding-bottom panel">
+    <!-- USER LOGON PAGE -->
+    <section id="top-up-page" class="bck navy padding-bottom panel">
         <header class="bck dark padding-top padding-bottom margin-bottom">
             <div class="row">
                 <nav class="on-left">
@@ -198,31 +193,15 @@
         </article>
     </section>
 
-    <div class="app-page overlay"></div>
-    <section id="modal-right" datatuktuk="modal" class="column_6 bck light panel">
-        <header class="color navy">
-            <h4 class="inline text large bold">Results.</h4>
-            <!-- <button data-modal="close" class="transparent small on-right inline icon remove"></button> -->
-        </header>
-        <article id="car-info" class="list scroll active">
-            <!-- Content will be rendered here -->
-            <ul>
-                <li>
-                    <a href="#" class="margin-bottom">
-                        <div class="on-right button bck alert text large bold padding white radius">ashdhjdhkhkhhsdjkhhahbahjhdh</div>
-                        <strong>&lt;strong&gt; element</strong>
-                    </a>
-                </li>
-            </ul>
-        </article>
-        <footer>
-            <button data-modal="close">Save</button>
-        </footer>
-    </section>
+    <!-- <nav class="hide hidden">
+        <a id="home" href="#home"></a>
+        <a id="top-up" href="#top-up-page"></a>
+        <a id="sign-up" href="#sign-up-page"></a>
+    </nav> -->
 
     <javascript>
         <!-- Base engine -->
-        <script type="text/javascript" src="cordova.js"></script>
+        <!-- // <script type="text/javascript" src="cordova.js"></script> -->
 
         <!-- Javascripts -->
         <script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
@@ -234,13 +213,27 @@
         <script type="text/javascript" src="./framework/tuktuk.js"></script>
 
         <!-- Knockout MVVM use -->
-        <script type="text/javascript" src="./js/knockout-2.2.1.js"></script>
+        <script type="text/javascript" src="./js/knockout-3.0.0.js"></script>
         <script type="text/javascript" src="./js/knockout.validation.js"></script>
         <script type="text/javascript" src="./js/moment.min.js"></script>
 
         <!-- App Functions -->
         <script type="text/javascript" src="./js/application.js"></script>
         <script type="text/javascript">
+            //on document ready, as soon as it begins to load
+            $(function() {
+                var self = appmodel;
+                ko.applyBindings(self);
+
+                $.support.cors = true;
+                // $.mobile.allowCrossDomainPages = true;
+
+                //initialise the app
+                // app.initialize();
+                $(window).on("load", function() {
+                    app.deviceready();
+                })
+            })
         </script>
     </javascript>
 
