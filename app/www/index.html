@@ -63,6 +63,17 @@
                     </button>
                 </div>
             </div>
+
+            <div class="row center">
+                <div class="column_8 margin">
+                    <h3 class="color green light largeactive">RESULTS</h3>
+                    <div class="column_8 on-left">
+                        <strong class="left large">Parking Fees</strong>
+                        <span class="bck alert radius text right">1000</span>
+                    </div>
+                </div>
+            </div>
+
         </article>
         <footer class="fixed bck dark text center padding bold">
             Handcrafted by
@@ -153,27 +164,77 @@
         </footer>
     </section>
 
-    <script type="text/x-handlerbars" data-template="true">
-        
-    </script>
+    <section class="list inset" data-bind="foreach: ndefData">
+        <div>No. Plate:
+            <a class="button-main" data-bind="text: noPlate"></a>
+        </div>
+        <div>phoneNo:
+            <a class="button-main" data-bind="text: phoneNo"></a>
+        </div>
 
-    <javascript>
-        <!-- Javascripts -->
-        <script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
-        <script type="text/javascript" src="./js/jquery.hammer.min.js"></script>
-        <!-- // <script type="text/javascript" src="./mobilefw/quo.debug.js"></script> -->
-        <!-- // <script type="text/javascript" src="./mobilefw/quo.js"></script> -->
+        <div>last scanned:
+            <a class="button-positive" data-bind="text: lastscanned"></a>
+        </div>
+        <div>scanned by:
+            <a class="button" data-bind="text: scannedBy"></a>
+        </div>
+        <div>time allocated:
+            <a class="button-positive" data-bind="text: timeAllocated"></a>
+        </div>
 
-        <script type="text/javascript" src="./framework/tuktuk.js"></script>
+        <div class="list-divider">
+            <h3>Overdues:</h3>
+        </div>
+        <div>Overtime:
+            <a class="button" data-bind="text: overdueTime"></a>
+        </div>
+        <div>Overdue Cost:
+            <a class="button-negative" data-bind="text: overdueCost"></a>
+        </div>
 
-        <!-- Other Important -->
-        <script type="text/javascript" src="./js/knockout-2.2.1.js"></script>
-        <script type="text/javascript" src="./js/knockout.validation.js"></script>
-        <script type="text/javascript" src="./js/moment.min.js"></script>
+        <div class="list-divider">
+            <h3>More Details:</h3>
+        </div>
+        <div>Time Paid:
+            <a class="button" data-bind="text: details.paid"></a>
+        </div>
+        <div>Ending:
+            <a class="button-main" data-bind="text: details.ending"></a>
+        </div>
+        <div>ETA:
+            <a class="button-main" data-bind="text: details.offset"></a>
+        </div>
+        <div>In Minutes:
+            <a data-bind="text: details.in_minutes, css: {'button-positive': details.in_minutes >= 0, 'button-negative': details.in_minutes < 0}"></a>
+        </div>
+        <div>In hours:
+            <a data-bind="text: details.in_hrs, css: {'button-positive': details.in_hrs >= 0, 'button-negative': details.in_hrs < 0}"></a>
+        </div>
+        <div>User REF ID:
+            <a class="button" data-bind="text: _id"></a>
+        </div>
+        <section>
 
-        <!-- App Functions -->
-        <script type="text/javascript" src="./js/application.js"></script>  
-    </javascript>
+            <script type="text/x-handlerbars" data-template="true">
+            </script>
+
+            <javascript>
+                <!-- Javascripts -->
+                <script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
+                <script type="text/javascript" src="./js/jquery.hammer.min.js"></script>
+                <!-- // <script type="text/javascript" src="./mobilefw/quo.debug.js"></script> -->
+                <!-- // <script type="text/javascript" src="./mobilefw/quo.js"></script> -->
+
+                <script type="text/javascript" src="./framework/tuktuk.js"></script>
+
+                <!-- Other Important -->
+                <script type="text/javascript" src="./js/knockout-2.2.1.js"></script>
+                <script type="text/javascript" src="./js/knockout.validation.js"></script>
+                <script type="text/javascript" src="./js/moment.min.js"></script>
+
+                <!-- App Functions -->
+                <script type="text/javascript" src="./js/application.js"></script>
+            </javascript>
 
 </body>
 
