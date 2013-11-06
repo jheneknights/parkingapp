@@ -6,6 +6,7 @@ html, body {
     overflow-x: hidden;
 }
 .fixed{position: fixed; width: 100%; bottom: 0; left: 0;}
+.hidden{display: none;}
 
 /* ---------- PAGE TRANSITIONS --------- */
 /*** adds the sliding animation to the page ***/
@@ -49,11 +50,17 @@ img.logo{
 .yellow-bg{background: #f1c40f}
 .blue-bg{background: #3498DB}
 .grey-bg{background: #bdc3c7}
-[class$="bg"]{color: white;}
+[class$="-bg"]{color: #fefefe;}
 
 .red-text{color: #e74c3c}
 .orange-text{color: #f39c12}
 .green-text{color: #2ecc71} /* PS --- can be used inside list tags to give them color colors */
 .yellow-text{color: #f1c40f}
 .blue-text{color: #3498DB}
+.purple-text{color: #8e44ad;}
 .grey-text{color: #bdc3c7}
+.white{color: #fefefe;}
+
+/* My own css */
+.small-padding{padding: 0.3em;}
+div[data-part="plateno"] span{color: #e74c3c;}

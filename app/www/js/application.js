@@ -20,41 +20,61 @@ var appmodel = {
     name: ko.observable('').extend({
         required: true,
         pattern: {
-            params: /[\w.-]{6,}/, //jhene-knights
-            message: "please enter a valid name."
+            params: /^([\w-]{2,})\s([\w-]{2,})$/, //jhene-knights
+            message: "please enter you two names."
         }
     }),
     registration: ko.observable('').extend({
         required: true,
         minLength: 6,
         pattern: {
-            params: /^(\+)?[0-9.-]{5,}/, //+254723001575
+            params: /^(\+)?[\d.-]{5,}/, //+254723001575
             message: "invalid registration number"
         }
     }),
-    //hide the sign up form
-    signupForm: ko.observable(false),
+    noplate: ko.observable('').extend({
+        required: true,
+        minLength: 6,
+        pattern: {
+            params: /^(\w{3})(\s)?(\d{3})(\w{1})?$/,
+            message: "please enter a valid plate no"
+        }
+    }),
     appInit: ko.observable(false), //has the app initialised
-    ndefData: ko.observableArray([
+    serverResponse: ko.observableArray([
         /* {
             phoneNo: '0723001575',
             noPlate: 'KBJ075K'
         } */
     ]),
     //scan status of the app
-    scanStatus: ko.observable("Scan a card to begin!")
+    scanStatus: ko.observable(null),
+    searchUser: function(ko, event) {
+        if (this.noplate().length !== 0) {
+            var data = { //create the XHR request param
+                scannedBy: app.storeThisSmartly("parkingapp").name,
+                noPlate: this.noplate(),
+                // phoneNo: tag.phoneNo,
+                timeStamp: moment().format(),
+                geolocation: "false" //should be added later in the app
+            }
+            appmodel.apperror(null);
+            appmodel.scanStatus('Searching...please wait.')
+            var jqhxr = jQuery.get('http://jkpkapp.aws.af.cm/scan', data, function(json) { //response from server
+                // navigator.notification.alert(JSON.stringify(json), app.doNothing, "Response from server");
+                appmodel.serverResponse.push(json);
+                appmodel.scanStatus(null);
+            }, "json").fail(function(xhr, text, error) {
+                appmodel.apperror("For some reason, failed to connect with the servers. <br/><span class='red-bg white small-padding'>Error: " + error + '</span>') //, app.doNothing, "XHR error");
+            }).done(function(json) {
+                appmodel.scanStatus(null)
+                console.log("successfully fetch related data from the servers");
+            });
+            // navigator.notification.vibrate(100);
+        }
+    },
+    apperror: ko.observable(null)
 }
-
-appmodel.appStatus = ko.computed(function() { //status of the app (on/off -- green/red)
-    var stat = appmodel.appInit() ? {
-        css: 'button-positive',
-        text: "active"
-    } : {
-        css: 'button-negative',
-        text: "inactive"
-    };
-    return stat;
-}, appmodel);
 
 appmodel.allisvalid = ko.computed(function() {
     //validate only these
@@ -80,33 +100,37 @@ var app = {
     },
     deviceready: function() {
         //App has initialised
+        if (app.checkUser()) //1st
+        {
+            console.log("there is a valid user");
+            appmodel.appInit(true); //pass true, app has innitialsied
+        }
     },
     //Authenticating the USER that will use the NFC scanner
     checkUser: function() {
         if (app.storeThisSmartly("parkingapp")) { //if the user exists
-            $('#signupmodal').slideUp(500);
+            $('section#sign-up-page').animate({
+                margin: "-150%"
+            });
+            return true;
         } else {
             //do nothing.
-            appmodel.signupForm(true); //show the sign-up form
-            $('#signupmodal').slideDown(500);
-
-            //align the signup form
-            $('form.registration-form').css('padding-top', function() {
-                return ($(window).height() - $(this).height()) / 6
-            })
-
+            $('section#sign-up-page').animate({
+                margin: 0
+            });
             //event to register user
-            $('.register-user').click(function(event) {
+            $('#register-user').click(function(event) {
                 event.preventDefault();
                 if (appmodel.allisvalid()) {
                     user = ko.toJS(appmodel);
-                    app.registerUser(user, app.doNothing);
+                    app.registerUser(user, app.checkUser);
                     console.log(JSON.stringify(user));
                 } else {
-                    $('.input-group').children("input").css('border', '1px solid red');
+                    $('#sign-up-page').find("input").attr('required', true);
                     console.error("There are errors with the form field")
                 }
             });
+            return false;
         }
     },
     registerUser: function(user, callback) {
@@ -114,10 +138,11 @@ var app = {
             local: true,
             content: {
                 name: user.name,
-                registaration: user.registaration
+                registaration: user.registration
             }
         })
-        if (typeof callback == "function") callback();
+        if (callback)
+            if (typeof callback == "function") callback();
         return true;
     },
     /**
