@@ -79,8 +79,9 @@ var vM = {
             }, "json").fail(function(xhr, text, error) {
                 vM.xhrError("For some reason, failed to connect with the servers. Error: " + error) //, app.doNothing, "XHR error");
             }).done(function(json) {
-                vM.xhrStatus(null)
                 console.log("successfully fetch related data from the servers");
+            }).always(function() {
+                vM.xhrStatus(null)
             });
             // navigator.notification.vibrate(100);
         } else {
@@ -107,8 +108,9 @@ var vM = {
             }, "json").fail(function(xhr, text, error) {
                 vM.xhrError("For some reason, failed to connect with the servers. Error: " + error) //, app.doNothing, "XHR error");
             }).done(function(json) {
-                vM.xhrStatus(null);
                 console.log("successfully fetch related data from the servers");
+            }).always(function() {
+                vM.xhrStatus(null)
             });
         } else {
             console.error("failed validation - topUp")
