@@ -14,7 +14,7 @@ Paying parking fees is paid via *SCRATCH CARDS*, via several paypoint in town us
 #####Depends on these plugin:
 * network
 * geolocation
-* NFC **(for now though, recent version depends on input and not scanning)**
+* NFC **(previous version, succeeding version requires user's input)**
 * dialogs
 * device
 * console *(for debugging purposes)*
