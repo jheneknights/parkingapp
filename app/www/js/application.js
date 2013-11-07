@@ -72,8 +72,9 @@ var vM = {
             }
             console.log(data);
             vM.xhrError(null);
-            vM.xhrStatus('Searching...please wait.')
-            var jqhxr = jQuery.get(app.URL.local + '/scan', data, function(json) { //response from server
+            vM.xhrStatus('Searching...please wait.');
+            vM.serverResponse.removeAll(); //empty the field
+            var jqhxr = jQuery.get(app.URL.server + '/scan', data, function(json) { //response from server
                 // navigator.notification.alert(JSON.stringify(json), app.doNothing, "Response from server");
                 if(json.response) vM.xhrError(json.message); else vM.serverResponse.push(json);
             }, "json").fail(function(xhr, text, error) {
@@ -101,8 +102,9 @@ var vM = {
             console.log(data);
             vM.xhrError(null);
             vM.xhrStatus('Please wait...')
+            vM.topupResponse.removeAll();
             //communicate with server now
-            var jqhxr = jQuery.get(app.URL.local + '/recharge', data, function(json) { //response from server
+            var jqhxr = jQuery.get(app.URL.server + '/recharge', data, function(json) { //response from server
                 // navigator.notification.alert(JSON.stringify(json), app.doNothing, "Response from server");
                 if(json.response) vM.xhrError(json.message); else vM.topupResponse.push(json);
             }, "json").fail(function(xhr, text, error) {
