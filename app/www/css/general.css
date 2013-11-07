@@ -50,7 +50,7 @@ img.logo{
 .yellow-bg{background: #f1c40f}
 .blue-bg{background: #3498DB}
 .grey-bg{background: #bdc3c7}
-[class$="-bg"]{color: #fefefe;}
+[class|=-bg]{color: #fefefe;}
 
 .red-text{color: #e74c3c}
 .orange-text{color: #f39c12}
@@ -59,8 +59,10 @@ img.logo{
 .blue-text{color: #3498DB}
 .purple-text{color: #8e44ad;}
 .grey-text{color: #bdc3c7}
+.black-text{color: black;}
 .white{color: #fefefe;}
 
 /* My own css */
 .small-padding{padding: 0.3em;}
 div[data-part="plateno"] span{color: #e74c3c;}
+.no-scroll{height: 100%; overflow-y: scroll; overflow-x: hidden}

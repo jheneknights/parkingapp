@@ -1,4 +1,4 @@
-//CONFIG MONGO coonectio - AppFog
+//CONFIG MONGO coonection - AppFog
 if (process.env.VCAP_SERVICES) {
     var env = JSON.parse(process.env.VCAP_SERVICES);
     var mongo = env['mongodb-1.8'][0]['credentials'];
@@ -26,10 +26,12 @@ var mongourl = generate_mongo_url(mongo);
 console.log(mongourl);
 
 //Load up required modules
-var moment = require('moment'),
+var moment = require('moment'), //momentjs
     db = require('mongoskin').db(mongourl, {
         safe: true
-    }); //connection to mongodb
+    }), //connection to mongodb
+    jQuery = require('jquery'), //jQuery
+    $ = jQuery;
 
 //the collections/tables to be in use
 var users = db.collection('users');
@@ -56,18 +58,24 @@ exports.updateOverdue = function(req, res) {
     app.overDue(req.query, res);
 }
 
+//recieve recharge card values
+exports.rechargeAccount = function(req, res) {
+    app.getCredentials(req.query, res);
+}
+
 var app = {
     server: null,
     paid: 100, //amount paid
-    airtime: {
-        "30mins": {amt: 20, time: 0.5},
-        "1hr": {amt: 50, time: 1},
-        "3hrs": {amt: 80, time: 3},
-        "6hrs": {amt: 120, time: 6},
-        "12hrs": {amt: 180, time: 12},
-        "15hrs": {amt: 240, time: 15},
-        "24hrs": {amt: 300, time: 24}
-    },
+    airtime: [
+        {human: "30mins", amount: 20, time: 0.5}, //time is hours
+        {human: "1hr", amount: 50, time: 1},
+        {human: "3hrs", amount: 80, time: 3},
+        {human: "6hrs", amount: 120, time: 6},
+        {human: "12hrs", amount: 180, time: 12},
+        {human: "15hrs", amount: 240, time: 15},
+        {human: "24hrs", amount: 300, time: 24}
+        // "match": /^\d{4,}\-?(20|80|120|240|300)$/
+    ],
     checkUser: function(params, serverResponse) {
         var self = this;
         self.server = serverResponse;
@@ -79,8 +87,7 @@ var app = {
         //find the user
         users.findOne(userSearch, function(e, res) {
             //console.log(res)
-            if (e) throw e;
-
+            if (e) throw e; //incase of any errors, stop!
             if (res) { //if found something
                 var results = res;
                 console.info("We found something, let's update it...");
@@ -90,7 +97,8 @@ var app = {
                         // timepaid: moment().unix(), //the of seconds since the Unix Epoch
                         // endofservice: moment().add('seconds', (app.paid / 20) * 60 * 60).unix(),
                         lastscanned: moment().format('ddd D, MMM YYYY, hh:mm:ss a'), //eg. "Sun 14, Feb 2010, 3:25:50 pm"
-                        scannedBy: params.scannedBy
+                        scannedBy: params.scannedBy,
+                        employeeId: params.scannedById
                     }
                 }, function(e, res) { //results of transaction
                     if (e) console.error(e);
@@ -112,15 +120,18 @@ var app = {
                         if (results.details.in_minutes < 0) {
                             var updates = {
                                 noPlate: results.noPlate, //to be used as ID for REF
-                                overdueTime: Math.abs(results.details.in_minutes) + " minutes",
-                                overdueCost: "Ksh " + Math.round(Math.abs(results.details.in_minutes)/60 * 20)
+                                overdueTime: Math.abs(results.details.in_minutes), //minutes
+                                overdueCost: Math.round(Math.abs(results.details.in_minutes)/60 * 20) //Ksh
                             }
                             self.updateOverdue(updates); //update his overdues
                         }
 
+                        //For reading purposes
+                        results.overdueCost = "Ksh " + results.overdueCost;
+                        results.overdueTime = results.overdueTime + " minutes";
+
                         //serve back the response
                         self.server.json(results);
-
                         console.log(results);
                         console.info("User's data updated successfully.");
                     }
@@ -143,18 +154,18 @@ var app = {
             lastscanned: null,
             scannedBy: null,
             employeeId: null,
-            overdueTime: null,
-            overdueCost: null
+            overdueTime: 0,
+            overdueCost: 0,
+            scanGeolocation: null, //last location of scanning, where was he parked?
+            topupGeolocation: null //last location, he/she topped up.
         }
+        //Add the user to the DB
         users.insert(user, function(e, res) {
             if (e) console.error(e);
             if (res) {
                 console.info("User data was added.");
                 //send back the RESPONSE
-                respond.json({
-                    status: 200,
-                    user: user
-                });
+                app.checkUser(params, respond); //now recheck user
             }
         })
     },
@@ -162,16 +173,83 @@ var app = {
     extractInfo: function() {
 
     },
+    getCredentials: function(p, serverResponse) {
+        var self = this;
+        self.server = serverResponse;
+        //the cred topped up.
+        var cred = {
+            value: p.credentials, //20|80...
+            user: p.noPlate
+        }
+        //Get the related airtime field
+        cred.data = $.grep(self.airtime, function(m, i) {
+            return m.amount == cred.value;
+        })[0];
+
+        console.log(cred); //return these results for viewing/debugging
+        self.rechargeAccount(cred, self.server);
+    },
+    rechargeAccount: function(cred, serverResponse) {
+        var self = this;
+        self.server =  serverResponse;
+        var userSearch = { //user search object
+            noPlate: cred.user
+        }
+        // console.log(arguments);
+
+        //find the user
+        users.findOne(userSearch, function(e, res) {
+            console.log(res)
+            if (e) throw e;
+            if (res) { //if found something
+                var r = res;
+                console.info("We found something, let's update it...");
+
+                var c = { //computed
+                    overdueCost: parseFloat(r.overdueCost) - cred.value,
+                    overdueTime: parseFloat(r.overdueTime) - (cred.data.time * 60)
+                }
+
+                //correct this values
+                var overdueCost = c.overdueCost < 0 ? 0: c.overdueCost;
+                var overdueTime = c.overdueTime < 0 ? 0: c.overdueTime;
+
+                //build a response, update the same user's details
+                users.update(userSearch, {
+                    '$set': { //set these details
+                        amountpaid: cred.value,
+                        timepaid: moment().unix(), //the of seconds since the Unix Epoch
+                        endofservice: moment().add('minutes', cred.data.time * 60).unix(),
+                        timeAllocated: moment.duration(cred.data.time * 60, "minutes").humanize(),
+                        overdueTime: overdueTime,
+                        overdueCost: overdueCost
+                        // lastscanned: moment().format('ddd D, MMM YYYY, hh:mm:ss a'), //eg. "Sun 14, Feb 2010, 3:25:50 pm"
+                        // scannedBy: cred.scannedBy
+                    }
+                }, function(e, res) { //results of transaction
+                    if (e) console.error(e);
+                    else { //respond back
+                        self.checkUser(userSearch, serverResponse);
+                        console.log(res);
+                        console.info("User's data updated successfully.");
+                    }
+                });
+            }else{
+                console.log("no one found in DB related to the search param given")
+                self.server.json({response: 404, message: "Seems this user is not registered with us"});
+            }
+        });
+    },
     //get or set the overdue cost
     overDue: function(params, respond) {;
         var userSearch = {
             noPlate: params.noPlate
         };
-
+        //Update user field
         users.update(userSearch, {
             '$set': { //set these details
-                overdueTime: params.overdueTime,
-                overdueCost: params.overdueCost
+                overdueTime: parseFloat(params.overdueTime), //in minutes
+                overdueCost: parseFloat(params.overdueCost) //in Ksh.
             }
         }, function(e, res) { //results of transaction
             if (e) console.error(e);
@@ -191,67 +269,4 @@ var app = {
         var resp = res ? res: false; //if server response is needed
         this.overDue(params, res);
     },
-    topUp: function(params, serverResponse) {
-        var self = this;
-        self.server = serverResponse;
-
-        var userSearch = {
-            noPlate: params.noPlate
-        };
-
-        //find the user
-        users.findOne(userSearch, function(e, res) {
-            //console.log(res)
-            if (e) throw e;
-
-            if (res) { //if found something
-                var results = res;
-                console.info("We found something, let's update it...");
-                //build a response, update the same user's details
-                users.update(userSearch, {
-                    '$set': { //set these details
-                        // timepaid: moment().unix(), //the of seconds since the Unix Epoch
-                        // endofservice: moment().add('seconds', (app.paid / 20) * 60 * 60).unix(),
-                        lastscanned: moment().format('ddd D, MMM YYYY, hh:mm:ss a'), //eg. "Sun 14, Feb 2010, 3:25:50 pm"
-                        scannedBy: params.scannedBy
-                    }
-                }, function(e, res) { //results of transaction
-                    if (e) console.error(e);
-                    else { //respond back
-                        //minor required calculations
-                        var paid = moment.unix(results.timepaid),
-                            endtime = moment.unix(results.endofservice),
-                            now = moment();
-
-                        results.details = {
-                            paid: paid.format('ddd D, h:mm a'), //"Sat 19, 12:00 am"
-                            ending: endtime.format('ddd D, h:mm a'),
-                            offset: endtime.from(now), //in 5 hours
-                            in_minutes: endtime.diff(now, "minutes"), //299
-                            in_hrs: endtime.diff(now, "hours")
-                        }
-
-                        //If the user has any overdues
-                        if (results.details.in_minutes < 0) {
-                            var updates = {
-                                noPlate: results.noPlate, //to be used as ID for REF
-                                overdueTime: Math.abs(results.details.in_minutes) + " minutes",
-                                overdueCost: "Ksh " + Math.round(Math.abs(results.details.in_minutes)/60 * 20)
-                            }
-                            self.updateOverdue(updates); //update his overdues
-                        }
-
-                        //serve back the response
-                        self.server.json(results);
-
-                        console.log(results);
-                        console.info("User's data updated successfully.");
-                    }
-                });
-            } else {
-                //if nothing was found create that entry for now
-                app.createUser(params, self.server);
-            }
-        });
-    }
 }

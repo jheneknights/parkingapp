@@ -76,9 +76,7 @@ app.get('/overdue', routes.updateOverdue)
 app.post('/register', routes.checkUser);
 
 //Topping up
-app.post('/scratchcard', function() {
-    //do something
-})
+app.get('/recharge', routes.rechargeAccount);
 
 //start up the servers
 http.createServer(app).listen(app.get('port'), function() {

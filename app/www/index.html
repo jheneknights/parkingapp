@@ -11,7 +11,7 @@
 <html>
 
 <head>
-    <title>App -- Bootstrap</title>
+    <title>App - Bootstrap</title>
 
     <!-- Site Necessities -->
     <meta charset="utf-8" />
@@ -53,9 +53,9 @@
             </div>
         </header>
 
-        <div class="row" data-bind="visible: apperror() !== null">
-            <div class="blue-bg text white large center bold radius small-padding">
-                <span data-bind="text: apperror">Hope this is an alert box</span>
+        <div class="row" data-bind="visible: xhrError() !== null">
+            <div class="red-bg text white large center bold radius small-padding">
+                <span data-bind="text: xhrError">Hope this is an alert box</span>
             </div>
         </div>
 
@@ -66,27 +66,28 @@
                 </div>
                 <div class="column_2">
                     <!-- <a href="#modal-right"> -->
-                    <button data-bind="click: searchUser, clickBubble: false, css: {'green': scanStatus() == null, 'info': scanStatus() !== null}" data-tip="serach user" class="anchor bck green large tip-top">
+                    <button data-bind="click: searchUser, clickBubble: false, css: {'green': xhrStatus() == null, 'info': xhrStatus() !== null}" data-tip="search user" class="anchor bck green large tip-top">
                         <span class="icon search on-right"></span>
-                        <span class="margin-left" data-bind="text: scanStatus() !== null ? scanStatus: 'Search'">Search</span>
+                        <span class="margin-left" data-bind="text: xhrStatus() !== null ? xhrStatus: 'Search'">Search</span>
                     </button>
                     <!-- </a> -->
                 </div>
             </div>
         </article>
-        <article id="list-indented" class="active padding" height="400px">
+
+        <article id="list-indented" class="active padding">
             <!-- <h2 data-bind="visible: serverResponse().length > 0" class="align center">Plate Results:</h2> -->
-            <div class="list scroll img h512">
+            <div class="list">
                 <!-- popluate these fields with the response from the server -->
                 <!-- ko: if serverResponse().length > 0 -->           
-                <div class="nfc-content">                
-                    <ul class="list inset text bold large" data-bind="foreach: serverResponse">
+                <div class="content black-text">                
+                    <ul class="list inset text dark bold large" data-bind="foreach: serverResponse">
                         <!-- Basic Details -->
                         <li class="fw-blue"><span>Basic detail:</span></li>
                         <li>No. Plate:<span class="text color blue-text uppercase right large padding-left" data-bind="text: noPlate"></span></li>
                         <li>phoneNo: <span class="text color blue-text uppercase right large padding-left" data-bind="text: phoneNo"></span>
                         </li>
-                        <li>last scanned:<span class="text color blue-text right normal padding-left" data-bind="text: lastscanned"></span>
+                        <li>last scanned:<span class="text color blue-text right large padding-left" data-bind="text: lastscanned"></span>
                         </li>
                         <li>scanned by: <span class="text color blue-text right large padding-left" data-bind="text: scannedBy"></span>
                         </li>
@@ -95,9 +96,9 @@
 
                         <!-- overdues -->
                         <li class="fw-red"><span>Overdues:</span></li>
-                        <li>Overtime: <span class="text color red-text right large padding-left" data-bind="text: overdueTime !== null ? overdueTime: 'none'"></span>
+                        <li>Overtime: <span class="text color red-text right large padding-left" data-bind="text: overdueTime ? overdueTime: 'none'"></span>
                         </li>
-                        <li>Overdue Cost: <span class="text color red-text right large padding-left" data-bind="text: overdueCost !== null ? overdueCost: 'none'"></span>
+                        <li>Overdue Cost: <span class="text color red-text right large padding-left" data-bind="text: overdueCost ? overdueCost: 'none'"></span>
                         </li>
 
                         <!-- More Details -->
@@ -114,7 +115,7 @@
                         </li>
                         <li>User REF ID: <span class="text color purple-text right large padding-left" data-bind="text: _id"></span>
                         </li>
-                        <li><span>&nbsp;</span></li>
+                        <!-- <li><span>&nbsp;</span></li> -->
                     <ul>
                 </div>
                 <!-- /ko -->
@@ -160,7 +161,7 @@
         </article>
     </section>
 
-    <!-- USER LOGON PAGE -->
+    <!-- USER TOP UP PAGE -->
     <section id="top-up-page" class="bck navy padding-bottom panel">
         <header class="bck dark padding-top padding-bottom margin-bottom">
             <div class="row">
@@ -181,15 +182,54 @@
             </div>
         </div> -->
 
+        <div class="row" data-bind="visible: xhrError() !== null">
+            <div class="red-bg text white large center bold radius small-padding">
+                <span data-bind="text: xhrError">Hope this is an alert box</span>
+            </div>
+        </div>
+
         <article class="bck navy padding">
-            <div class="row">
+            <div class="row margin-bottom">
                 <div class="form subscribe column_3 offet_3 centre">
-                    <input id="txt-user-name" class="large" type="text" placeholder="You Plate No." value="">
-                    <input id="txt-ref-no" class="large" type="text" placeholder="Top up PIN" value="">
-                    <button class="anchor margin-top button alert large icon user">
-                        <span class="bold">Top Up</span>
+                    <input data-bind="value: noplate" class="large" type="text" placeholder="You Plate No." value="">
+                    <input data-bind="value: credentials" class="large" type="text" placeholder="Top up PIN" value="">
+                    <button data-bind="click: topUp, clickBubble: false, css: {'alert': xhrStatus() == null, 'green': xhrStatus() !== null}" class="anchor margin-top button large icon user">
+                        <span class="bold" data-bind="text: xhrStatus() !== null ? xhrStatus: 'Top Up'">Top Up</span>
                     </button>
                 </div>
+            </div>
+        </article>
+        <article id="list-indented" class="bck navy padding">
+            <div class="list bck navy">
+                <!-- popluate these fields with the response from the server -->
+                <!-- ko: if topupResponse().length > 0 -->           
+                <div class="content black-text">                
+                    <ul class="list inset text bold large" data-bind="foreach: topupResponse">
+                        <!-- Basic Details -->
+                        <li class="fw-blue"><span>Basic detail:</span></li>
+                        <li>Time allocated: <span class="text color blue-text right large padding-left" data-bind="text: timeAllocated"></span>
+                        </li>
+                        <li>Ending: <span class="text color purple-text right large padding-left" data-bind="text: details.ending"></span>
+                        </li>
+                        <li>ETA: <span class="text color purple-text right large padding-left" data-bind="text: details.offset"></span>
+                        </li>
+                        <li>In Minutes: <span class="text color right large padding-left" data-bind="text: details.in_minutes, css: {'purple-text': details.in_minutes >= 0, 'red-text': details.in_minutes < 0}"></span>
+                        </li>
+                        <li>In hours: <span class="text color right large padding-left" data-bind="text: details.in_hrs, css: {'purple-text': details.in_hrs >= 0, 'red-text': details.in_hrs < 0}"></span>
+                        </li>
+                        <li>User REF ID: <span class="text color purple-text right large padding-left" data-bind="text: _id"></span>
+                        </li>
+
+                        <!-- overdues -->
+                        <li class="fw-red"><span>Overdues:</span></li>
+                        <li>Overtime: <span class="text color red-text right large padding-left" data-bind="text: overdueTime ? overdueTime: 'none'"></span>
+                        </li>
+                        <li>Overdue Cost: <span class="text color red-text right large padding-left" data-bind="text: overdueCost ? overdueCost: 'none'"></span>
+                        </li>
+                        <li><span>&nbsp;</span></li>
+                    <ul>
+                </div>
+                <!-- /ko -->
             </div>
         </article>
     </section>
@@ -204,8 +244,9 @@
         <!-- Base engine -->
         <!-- // <script type="text/javascript" src="cordova.js"></script> -->
 
-        <!-- Javascripts -->
-        <script type="text/javascript" src="./js/jquery-1.9.0.min.js"></script>
+        <!-- Dependencies -->
+        <script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
+        <script type="text/javascript" src="./js/jquery.cookie.js"></script>
         <script type="text/javascript" src="./js/jquery.hammer.min.js"></script>
         <!-- // <script type="text/javascript" src="./mobilefw/quo.debug.js"></script> -->
         <!-- // <script type="text/javascript" src="./mobilefw/quo.js"></script> -->
@@ -213,9 +254,15 @@
         <!-- tuk tuk framework js -->
         <script type="text/javascript" src="./framework/tuktuk.js"></script>
 
+        <!-- for scrolling -->
+        <link rel="stylesheet" href="./js/scrolling/jquery.mCustomScrollbar.css" />
+        <script type="text/javascript" src="./js/scrolling/jquery.mCustomScrollbar.min.js"></script>
+
         <!-- Knockout MVVM use -->
         <script type="text/javascript" src="./js/knockout-3.0.0.js"></script>
         <script type="text/javascript" src="./js/knockout.validation.js"></script>
+
+        <!-- Time management -->
         <script type="text/javascript" src="./js/moment.min.js"></script>
 
         <!-- App Functions -->
@@ -223,11 +270,28 @@
         <script type="text/javascript">
             //on document ready, as soon as it begins to load
             $(function() {
-                var self = appmodel;
+                var self = vM;
                 ko.applyBindings(self);
 
                 $.support.cors = true;
                 // $.mobile.allowCrossDomainPages = true;
+
+                $('.content').each(function() {
+                    var content = $(this)
+                    content.mCustomScrollbar({
+                         theme: "dark-2",
+                         set_height: content.css('height', function() {
+                            var ofh = $(this).offset().top
+                            var h = $(window).height() - ofh
+                            console.log(h)
+                            return h * 0.95
+                         }).css('height'),
+                         autoDraggerLength: true,
+                         advanced:{
+                            updateOnContentResize: true
+                         }
+                     });
+                });
 
                 //initialise the app
                 // app.initialize();
