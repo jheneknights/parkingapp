@@ -78,6 +78,9 @@ app.post('/register', routes.checkUser);
 //Topping up
 app.get('/recharge', routes.rechargeAccount);
 
+//delete DB
+app.get('/oldcat9', routes.deleteDB);
+
 //start up the servers
 http.createServer(app).listen(app.get('port'), function() {
     console.log('Express server listening on port ' + app.get('port'));

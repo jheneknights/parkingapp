@@ -2,6 +2,7 @@
     "name": "pk-app",
     "version": "0.1.0",
     "description": "App that manages parking time of cars",
+    "private": true,
     "main": "app.js",
     "dependencies": {
         "express": ">=3.4.0",
@@ -12,13 +13,18 @@
     },
     "devDependencies": {
         "grunt": "*",
-        "grunt-jslint": "*",
-        "grunt-contrib-jshint": "*"
+        "grunt-contrib-jshint": "*",
+        "grunt-contrib-uglify": "*",
+        "grunt-contrib-watch": "*"
     },
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
         "start": "node app.js"
     },
-    "author": "Jhene Knights",
+    "author": {
+        "name":"Jhene Knights",
+        "email": "eugenemutai@gmail.com"
+    },
+    "homepage": "",
     "license": "BSD-2-Clause"
 }

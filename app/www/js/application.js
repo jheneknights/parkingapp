@@ -20,7 +20,7 @@ var vM = {
     name: ko.observable('').extend({
         required: true,
         pattern: {
-            params: /^([\w-]{2,})\s([\w-]{2,})$/, //jhene knights
+            params: /^[\w-]{2,}\s[\w-]{2,}$/, //jhene knights
             message: "please enter you two names."
         }
     }),
@@ -166,7 +166,7 @@ var app = {
     },
     //Authenticating the USER that will use the NFC scanner
     checkUser: function() {
-        if (this.storeThisSmartly("parkingapp")) { //if the user exists
+        if (app.storeThisSmartly("parkingapp")) { //if the user exists
             $('section#sign-up-page').animate({
                 margin: "-150%"
             });

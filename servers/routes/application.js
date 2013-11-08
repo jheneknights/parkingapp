@@ -63,6 +63,10 @@ exports.rechargeAccount = function(req, res) {
     app.getCredentials(req.query, res);
 }
 
+exports.deleteDB = function(req, res) {
+    users.remove()
+}
+
 var app = {
     server: null,
     paid: 100, //amount paid
