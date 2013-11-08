@@ -149,16 +149,16 @@ var app = {
     },
     doNothing: function() {}, //empty function
     initialize: function() {
-        this.bind();
+        app.bind();
         console.log("initialising app...");
     },
     bind: function() {
         //start cordova and the native app functions
-        document.addEventListener('deviceready', this.deviceready, false);
+        document.addEventListener('deviceready', app.deviceready, false);
     },
     deviceready: function() {
         //App has initialised
-        if (this.checkUser()) //1st
+        if (app.checkUser()) //1st
         {
             console.log("there is a valid user");
             vM.appInit(true); //pass true, app has innitialsied
@@ -192,7 +192,7 @@ var app = {
         }
     },
     registerUser: function(user, callback) {
-        this.storeThisSmartly("parkingapp", {
+        app.storeThisSmartly("parkingapp", {
             local: true,
             content: {
                 name: user.name,

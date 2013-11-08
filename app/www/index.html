@@ -242,7 +242,7 @@
 
     <javascript>
         <!-- Base engine -->
-        <!-- // <script type="text/javascript" src="cordova.js"></script> -->
+        <script type="text/javascript" src="cordova.js"></script>
 
         <!-- Dependencies -->
         <script type="text/javascript" src="./js/jquery-1.9.1.min.js"></script>
@@ -294,10 +294,8 @@
                 });
 
                 //initialise the app
-                // app.initialize();
-                $(window).on("load", function() {
-                    app.deviceready();
-                })
+                app.initialize();
+                // $(window).on("load", app.deviceready);
             })
         </script>
     </javascript>
