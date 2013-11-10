@@ -64,7 +64,7 @@ app.get('/', function(req, res) {
 
 //default app route
 app.get('/application', function(req, res) {
-    res.sendfile('./application/test.html')
+    res.sendfile('./application/www/.html')
 });
 
 //Scan instance

@@ -4,9 +4,7 @@ platforms/
 plugins/
 
 #in servers ingore the node modules folder
-node_modules/
+#node_modules/
 
-.DS_Store
-
-#upload the app please if any
-!platforms/android/bin/*.apk
+#ingore any file that starts with '.'
+.*
