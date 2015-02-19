@@ -76,7 +76,8 @@ var vM = {
             vM.serverResponse.removeAll(); //empty the field
             var jqhxr = jQuery.get(app.URL.server + '/scan', data, function(json) { //response from server
                 // navigator.notification.alert(JSON.stringify(json), app.doNothing, "Response from server");
-                if(json.response) vM.xhrError(json.message); else vM.serverResponse.push(json);
+                if (json.response) vM.xhrError(json.message);
+                else vM.serverResponse.push(json);
             }, "json").fail(function(xhr, text, error) {
                 vM.xhrError("For some reason, failed to connect with the servers. Error: " + error) //, app.doNothing, "XHR error");
             }).done(function(json) {
@@ -106,7 +107,8 @@ var vM = {
             //communicate with server now
             var jqhxr = jQuery.get(app.URL.server + '/recharge', data, function(json) { //response from server
                 // navigator.notification.alert(JSON.stringify(json), app.doNothing, "Response from server");
-                if(json.response) vM.xhrError(json.message); else vM.topupResponse.push(json);
+                if (json.response) vM.xhrError(json.message);
+                else vM.topupResponse.push(json);
             }, "json").fail(function(xhr, text, error) {
                 vM.xhrError("For some reason, failed to connect with the servers. Error: " + error) //, app.doNothing, "XHR error");
             }).done(function(json) {
@@ -226,15 +228,18 @@ var app = {
     },
     //http://maps.google.com/maps/api/geocode/json?latlng=-1.2922417,36.8991335&sensor=true
     geoLocateUser: function() {
-        var location = '', coords = {};
+        var location = '',
+            coords = {};
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function(position) {
                     //console.log(position)
-                    $.get("http://app.prittynote.com/app/geolocate.php",
-                        {latlng: position.coords.latitude + ',' + position.coords.longitude, sensor: "true"},
+                    $.get("http://app.prittynote.com/app/geolocate.php", {
+                            latlng: position.coords.latitude + ',' + position.coords.longitude,
+                            sensor: "true"
+                        },
                         function(m) {
-                            if(m.results.length > 0) {
-                                if(m.results.length > 1) location = m.results[1].formatted_address;
+                            if (m.results.length > 0) {
+                                if (m.results.length > 1) location = m.results[1].formatted_address;
                                 else location = m.results[0].formatted_address;
                             }
 
@@ -244,18 +249,18 @@ var app = {
                                 location: location
                             }
 
-                            if(localStorage) {
+                            if (localStorage) {
                                 app.storeThisSmartly("userLocationData", {
                                     content: coords
                                 })
-                            }else{
+                            } else {
                                 $.cookie('userLocationData', JSON.stringify(coords))
                             }
                             console.log("User's location: " + location)
                         }, "json")
                 },
                 function(e) {
-                    switch(e.code) {
+                    switch (e.code) {
                         case e.PERMISSION_DENIED:
                             //if permission was denied
                             break
@@ -268,8 +273,11 @@ var app = {
                             break
                     }
                     //alert("Error Occured: " + e.message)
-                },
-                {enableHighAccuracy: true, timeout: 30000, maximumAge: 2000*60*60}
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 30000,
+                    maximumAge: 2000 * 60 * 60
+                }
             )
             //timeout after 30 secs, and get pos which is not older than 2 hrs
         }

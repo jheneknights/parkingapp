@@ -40,7 +40,10 @@ app.use(app.router);
 
 //The path to the application (android)
 // we are specifying the html directory as another public directory
-app.use(express.static(path.join(__dirname, 'application')));
+app.use(express.static(path.join(__dirname, 'application/www')));
+
+// a convenient variable to refer to the HTML directory
+var static_html_dir = './application/';
 
 // development only
 if ('development' == app.get('env')) {
@@ -64,7 +67,7 @@ app.get('/', function(req, res) {
 
 //default app route
 app.get('/application', function(req, res) {
-    res.sendfile('./application/www/.html')
+    res.sendfile(static_html_dir + 'www/index.html')
 });
 
 //Scan instance

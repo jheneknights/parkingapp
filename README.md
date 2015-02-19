@@ -1,8 +1,6 @@
 ##Parking App v0.2
 
-As opposed from previous version that required __NFC__ for scanning and reading each car's parking info, this one requires
-the user to input the plate no, then searcj through the servers to get back related info of the plate no/car in subject
-if the car in subject exists in the database. 
+As opposed from previous version that required __NFC__ for scanning and reading each car's parking info, this one requires the user to input the plate no, then search through the servers to get back related info of the plate no/car in subject. If the car in subject exists in the database. 
 
 ####current alpha released - v0.2
 > App to be used in the metropolitans one day, target Kenya at the moment.

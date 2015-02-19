@@ -165,7 +165,7 @@ var app = {
         }
         //Add the user to the DB
         users.insert(user, function(e, res) {
-            if (e) console.error(e);
+            if (e) console.error(e); //if failed
             if (res) {
                 console.info("User data was added.");
                 //send back the RESPONSE
